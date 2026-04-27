@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: calculator-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: calculator-api
+  template:
+    metadata:
+      labels:
+        app: calculator-api
+    spec:
+      containers:
+        - name: calculator-api
+          image: DOCKERHUB_USERNAME/calculator-api:latest
+          ports:
+            - containerPort: 8000

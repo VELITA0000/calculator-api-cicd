@@ -1,0 +1,28 @@
+name: delivery
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  deliver:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      - name: Build image
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/calculator-api:${{ github.ref_name }} .
+
+      - name: Tag latest
+        run: docker tag ${{ secrets.DOCKERHUB_USERNAME }}/calculator-api:${{ github.ref_name }} ${{ secrets.DOCKERHUB_USERNAME }}/calculator-api:latest
+
+      - name: Push version tag
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/calculator-api:${{ github.ref_name }}
+
+      - name: Push latest
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/calculator-api:latest
