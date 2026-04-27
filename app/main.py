@@ -33,7 +33,7 @@ def updated_subtract_numbers(payload: BinaryOperation):
 
 
 @app.post("/multiply")
-def multiply_numbers(payload: BinaryOperation):
+def updagted_multiply_numbers(payload: BinaryOperation):
     return {
         "operation": "multiply", 
         "result": payload.a * payload.b
