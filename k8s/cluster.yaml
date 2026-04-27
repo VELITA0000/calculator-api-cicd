@@ -4,22 +4,21 @@ kind: ClusterConfig
 metadata:
   name: practica-k8s
   region: us-east-1
-  version: "1.29"
+  version: "1.31"
+
+# Evita cambios futuros de comportamiento por defecto en eksctl
+autoModeConfig:
+  enabled: false
+
+# Reutiliza rol existente del laboratorio (sin crear roles nuevos)
+iam:
+  serviceRoleARN: arn:aws:iam::304450075728:role/LabRole
 
 managedNodeGroups:
-  - name: ng-general
-    desiredCapacity: 2
-    minSize: 2
-    maxSize: 3
+  - name: workers
     instanceType: t3.medium
-    volumeSize: 20
+    minSize: 1
+    maxSize: 2
+    desiredCapacity: 1
     iam:
-      withAddonPolicies:
-        imageBuilder: true
-        autoScaler: true
-        cloudWatch: true
-
-addons:
-  - name: vpc-cni
-  - name: coredns
-  - name: kube-proxy
+      instanceRoleARN: arn:aws:iam::304450075728:role/LabRole
