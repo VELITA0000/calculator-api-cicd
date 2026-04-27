@@ -25,7 +25,7 @@ def updated_sum_numbers(payload: BinaryOperation):
 
 
 @app.post("/subtract")
-def subtract_numbers(payload: BinaryOperation):
+def updated_subtract_numbers(payload: BinaryOperation):
     return {
         "operation": "subtract", 
         "result": payload.a - payload.b
