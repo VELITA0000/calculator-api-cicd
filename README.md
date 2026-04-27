@@ -233,6 +233,9 @@ En `Settings > Secrets and variables > Actions`, agrega:
 - `DOCKERHUB_USERNAME` = tu usuario Docker Hub
 - `DOCKERHUB_TOKEN` = token Docker Hub
 - `KUBECONFIG_B64` = salida base64 de tu kubeconfig
+- `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN` = mismas credenciales temporales del Lab (las mismas que usas con `aws configure`)
+
+El workflow `deploy` ejecuta `kubectl` contra EKS; el kubeconfig llama internamente a `aws eks get-token`. En GitHub Actions no existe tu perfil local de AWS, por eso hace falta configurar esas variables con el paso **Configure AWS credentials** del workflow. Cuando el Lab caduca (cada ~4 horas), actualiza esos tres secrets y vuelve a lanzar el job `deploy` (por ejemplo con **Re-run failed jobs** en Actions).
 
 ### Abrir puerto NodePort 30080 en Security Group (EKS)
 
