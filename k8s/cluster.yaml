@@ -1,0 +1,25 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: practica-k8s
+  region: us-east-1
+  version: "1.29"
+
+managedNodeGroups:
+  - name: ng-general
+    desiredCapacity: 2
+    minSize: 2
+    maxSize: 3
+    instanceType: t3.medium
+    volumeSize: 20
+    iam:
+      withAddonPolicies:
+        imageBuilder: true
+        autoScaler: true
+        cloudWatch: true
+
+addons:
+  - name: vpc-cni
+  - name: coredns
+  - name: kube-proxy
