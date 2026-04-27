@@ -17,7 +17,7 @@ def health():
 
 
 @app.post("/sum")
-def sum_numbers(payload: BinaryOperation):
+def updated_sum_numbers(payload: BinaryOperation):
     return {
         "operation": "sum", 
         "result": payload.a + payload.b
