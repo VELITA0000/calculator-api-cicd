@@ -235,7 +235,14 @@ En `Settings > Secrets and variables > Actions`, agrega:
 - `KUBECONFIG_B64` = salida base64 de tu kubeconfig
 - `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN` = mismas credenciales temporales del Lab (las mismas que usas con `aws configure`)
 
-El workflow `deploy` ejecuta `kubectl` contra EKS; el kubeconfig llama internamente a `aws eks get-token`. En GitHub Actions no existe tu perfil local de AWS, por eso hace falta configurar esas variables con el paso **Configure AWS credentials** del workflow. Cuando el Lab caduca (cada ~4 horas), actualiza esos tres secrets y vuelve a lanzar el job `deploy` (por ejemplo con **Re-run failed jobs** en Actions).
+El workflow `deploy` ejecuta `kubectl` contra EKS; el kubeconfig llama internamente a `aws eks get-token`. En GitHub Actions no existe tu perfil local de AWS, por eso el job exporta `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` y `AWS_SESSION_TOKEN` desde secrets. Cuando el Lab caduca (cada ~4 horas), actualiza esos tres secrets y vuelve a lanzar el job `deploy` (por ejemplo con **Re-run failed jobs** en Actions).
+
+Si ves **The request signature we calculated does not match the signature you provided**:
+
+1. Borra y vuelve a crear los tres secrets (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN`) copiando de nuevo el panel del Learner Lab en la misma sesion (las tres deben ir juntas).
+2. Sin espacios al inicio o al final, sin comillas en el valor del secret, sin pegar la linea `export AWS_...=`.
+3. Confirma que no intercambiaste Access Key y Secret Key entre si.
+4. En local, prueba con las mismas tres variables: `aws sts get-caller-identity` debe funcionar antes de volver a pegarlas en GitHub.
 
 ### Abrir puerto NodePort 30080 en Security Group (EKS)
 
